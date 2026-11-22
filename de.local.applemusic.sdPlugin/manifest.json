@@ -1,0 +1,168 @@
+{
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+  "Name": "Apple Music Now Playing",
+  "Version": "1.4.0.0",
+  "Author": "Custom",
+  "Description": "Zeigt den aktuellen Apple-Music-Titel (Cover, Titel, Künstler, Fortschritt) auf dem Display und steuert die Wiedergabe – Windows.",
+  "UUID": "de.local.applemusic",
+  "Icon": "imgs/plugin",
+  "CategoryIcon": "imgs/category",
+  "Category": "Apple Music",
+  "CodePath": "bin/plugin.js",
+  "Nodejs": {
+    "Version": "20"
+  },
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.5"
+  },
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Actions": [
+    {
+      "UUID": "de.local.applemusic.nowplaying",
+      "Name": "Now Playing (Display)",
+      "Icon": "imgs/action-nowplaying",
+      "Tooltip": "Cover, Titel und Fortschritt auf dem Display. Drehen: Titel wechseln oder spulen. Drücken/Tippen: Play/Pause.",
+      "Controllers": [
+        "Encoder"
+      ],
+      "Encoder": {
+        "layout": "layouts/nowplaying.json",
+        "TriggerDescription": {
+          "Rotate": "Titel wechseln / spulen",
+          "Push": "Play / Pause",
+          "Touch": "Play / Pause"
+        }
+      },
+      "PropertyInspectorPath": "pi/settings.html",
+      "SupportedInMultiActions": false,
+      "States": [
+        {
+          "Image": "imgs/key-nowplaying"
+        }
+      ]
+    },
+    {
+      "UUID": "de.local.applemusic.playpause",
+      "Name": "Play / Pause (mit Cover)",
+      "Icon": "imgs/action-playpause",
+      "Tooltip": "Play/Pause. Zeigt das aktuelle Albumcover auf der Taste.",
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "pi/settings.html",
+      "States": [
+        {
+          "Image": "imgs/key-playpause",
+          "ShowTitle": false
+        }
+      ]
+    },
+    {
+      "UUID": "de.local.applemusic.next",
+      "Name": "Nächster Titel",
+      "Icon": "imgs/action-next",
+      "Tooltip": "Springt zum nächsten Titel.",
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "pi/settings.html",
+      "States": [
+        {
+          "Image": "imgs/key-next",
+          "ShowTitle": false
+        }
+      ]
+    },
+    {
+      "UUID": "de.local.applemusic.previous",
+      "Name": "Vorheriger Titel",
+      "Icon": "imgs/action-previous",
+      "Tooltip": "Springt zum vorherigen Titel bzw. an den Anfang.",
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "pi/settings.html",
+      "States": [
+        {
+          "Image": "imgs/key-previous",
+          "ShowTitle": false
+        }
+      ]
+    },
+    {
+      "UUID": "de.local.applemusic.volume",
+      "Name": "Lautstärke (Display)",
+      "Icon": "imgs/action-volume",
+      "Tooltip": "Systemlautstärke mit Anzeige. Drehen: lauter/leiser. Drücken/Tippen: stumm.",
+      "Controllers": [
+        "Encoder"
+      ],
+      "Encoder": {
+        "layout": "layouts/nowplaying.json",
+        "TriggerDescription": {
+          "Rotate": "Lauter / leiser",
+          "Push": "Stumm",
+          "Touch": "Stumm"
+        }
+      },
+      "PropertyInspectorPath": "pi/settings.html",
+      "SupportedInMultiActions": false,
+      "States": [
+        {
+          "Image": "imgs/key-volume"
+        }
+      ]
+    },
+    {
+      "UUID": "de.local.applemusic.shuffle",
+      "Name": "Zufallswiedergabe",
+      "Icon": "imgs/action-shuffle",
+      "Tooltip": "Shuffle an/aus. Leuchtet rot, wenn aktiv.",
+      "Controllers": [
+        "Keypad"
+      ],
+      "States": [
+        {
+          "Image": "imgs/key-shuffle",
+          "ShowTitle": false
+        }
+      ]
+    },
+    {
+      "UUID": "de.local.applemusic.repeat",
+      "Name": "Wiederholen",
+      "Icon": "imgs/action-repeat",
+      "Tooltip": "Wechselt: Aus → Alle → Einen Titel.",
+      "Controllers": [
+        "Keypad"
+      ],
+      "States": [
+        {
+          "Image": "imgs/key-repeat",
+          "ShowTitle": false
+        }
+      ]
+    },
+    {
+      "UUID": "de.local.applemusic.open",
+      "Name": "Apple Music öffnen",
+      "Icon": "imgs/action-open",
+      "Tooltip": "Startet Apple Music bzw. holt es in den Vordergrund.",
+      "Controllers": [
+        "Keypad"
+      ],
+      "States": [
+        {
+          "Image": "imgs/key-open",
+          "ShowTitle": false
+        }
+      ]
+    }
+  ]
+}

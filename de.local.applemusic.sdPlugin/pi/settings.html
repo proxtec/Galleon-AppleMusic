@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Apple Music Now Playing</title>
+  <style>
+    body { background: #2D2D2D; color: #D8D8D8; font: 13px -apple-system, "Segoe UI", sans-serif; margin: 0; padding: 8px 12px; }
+    .row { display: flex; align-items: center; margin: 6px 0; }
+    .row label { flex: 0 0 96px; color: #969696; }
+    .row select, .row input { flex: 1; background: #3D3D3D; color: #D8D8D8; border: none; border-radius: 3px; padding: 4px 6px; font: inherit; }
+    .hint { color: #7A7A7A; font-size: 11px; margin: 10px 0 0 96px; line-height: 1.4; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="row encoder-only hidden">
+    <label for="rotate">Drehen</label>
+    <select id="rotate">
+      <option value="tracks">Titel wechseln</option>
+      <option value="seek">Im Titel spulen</option>
+    </select>
+  </div>
+  <div class="row encoder-only seek-only hidden">
+    <label for="seekStep">Schrittweite</label>
+    <select id="seekStep">
+      <option value="2">2 Sekunden</option>
+      <option value="5">5 Sekunden</option>
+      <option value="10">10 Sekunden</option>
+      <option value="15">15 Sekunden</option>
+    </select>
+  </div>
+  <div class="row volume-only hidden">
+    <label for="volStep">Schrittweite</label>
+    <select id="volStep">
+      <option value="1">1 %</option>
+      <option value="2">2 %</option>
+      <option value="5">5 %</option>
+    </select>
+  </div>
+  <div class="row not-volume">
+    <label for="source">Quelle</label>
+    <select id="source">
+      <option value="apple">Nur Apple Music</option>
+      <option value="any">Apple Music, sonst jede Medien-App</option>
+    </select>
+  </div>
+  <p class="hint not-volume">Drücken oder Tippen aufs Display: Play/Pause.<br>Läuft Apple Music nicht, zeigt das Display „Keine Wiedergabe“.</p>
+  <p class="hint volume-only hidden">Drehen: Systemlautstärke. Drücken oder Tippen: stumm schalten.</p>
+
+  <script>
+    let ws, uuid, settings = {};
+    const defaults = { rotate: 'tracks', source: 'apple', seekStep: '5', volStep: '2' };
+    const $ = (id) => document.getElementById(id);
+
+    function apply() {
+      const s = Object.assign({}, defaults, settings);
+      for (const k of Object.keys(defaults)) $(k).value = String(s[k]);
+      document.querySelectorAll('.seek-only').forEach((el) => el.style.display = s.rotate === 'seek' ? '' : 'none');
+    }
+
+    function save() {
+      settings = { rotate: $('rotate').value, source: $('source').value, seekStep: Number($('seekStep').value), volStep: Number($('volStep').value) };
+      ws.send(JSON.stringify({ event: 'setSettings', context: uuid, payload: settings }));
+      apply();
+    }
+
+    // Wird von Stream Deck aufgerufen
+    window.connectElgatoStreamDeckSocket = function (port, piUUID, registerEvent, info, actionInfo) {
+      uuid = piUUID;
+      const a = JSON.parse(actionInfo);
+      settings = (a.payload && a.payload.settings) || {};
+      if (a.action === 'de.local.applemusic.nowplaying') {
+        document.querySelectorAll('.encoder-only').forEach((el) => el.classList.remove('hidden'));
+      }
+      if (a.action === 'de.local.applemusic.volume') {
+        document.querySelectorAll('.volume-only').forEach((el) => el.classList.remove('hidden'));
+        document.querySelectorAll('.not-volume').forEach((el) => el.style.display = 'none');
+      }
+      apply();
+      ws = new WebSocket('ws://127.0.0.1:' + port);
+      ws.onopen = () => ws.send(JSON.stringify({ event: registerEvent, uuid: piUUID }));
+      ws.onmessage = (e) => {
+        const m = JSON.parse(e.data);
+        if (m.event === 'didReceiveSettings') { settings = m.payload.settings || {}; apply(); }
+      };
+      ['rotate', 'source', 'seekStep', 'volStep'].forEach((id) => $(id).addEventListener('change', save));
+    };
+  </script>
+</body>
+</html>
