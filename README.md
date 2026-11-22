@@ -1,6 +1,6 @@
 # Apple Music Now Playing – Stream Deck Plugin für Windows
 
->> Vollständig mit KI Entwickelt - mit der hilfe von Claude
+> Vollständig mit KI Entwickelt - mit der hilfe von Claude
 
 
 Zeigt den aktuell laufenden Apple-Music-Titel im Stil von Apple Music auf dem Display eines Stream Decks mit Drehreglern und steuert die Wiedergabe. Entstanden für die **Corsair Galleon 100 SD** (Tastatur mit eingebautem Stream Deck), weil es dort bisher nur eine Spotify-Anzeige gab.
